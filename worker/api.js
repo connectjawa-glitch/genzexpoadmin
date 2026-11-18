@@ -9,7 +9,14 @@ const json=(body,status=200,headers={})=>new Response(JSON.stringify(body),{stat
 const fail=(error,status=400,headers={})=>json({error},status,headers);
 const cookie=(token,maxAge)=>`${COOKIE}=${token}; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=${maxAge}`;
 const decode64=value=>Uint8Array.from(atob(value),c=>c.charCodeAt(0));
-const rowBooking=row=>row?{stall:row.stall,booked:row.booked===1,revision:row.revision,updatedAt:row.updated_at}:null;
+const statusNames=['available','reserved','sold_out'];
+// The schema-only migration defaults old rows to status 0. Keep their occupied
+// booked bit authoritative until an admin explicitly saves a new status.
+const rowBooking=row=>{
+ if(!row)return null;
+ const status=row.booked===1&&row.status===0?'sold_out':statusNames[row.status];
+ return{stall:row.stall,status,booked:status!=='available',revision:row.revision,updatedAt:row.updated_at};
+};
 
 export async function verifyPassword(password,encoded){
  try{
@@ -64,7 +71,7 @@ export async function handleAPI(request,env,ctx){
  if(!env.DB||!env.ADMIN_PASSWORD_HASH)return fail('Booking management is temporarily unavailable.',503);
  try{
   if(path==='/api/bookings'&&request.method==='GET'){
-   const result=await env.DB.prepare('SELECT stall, booked, revision, updated_at FROM stall_bookings ORDER BY stall').all();
+   const result=await env.DB.prepare('SELECT stall, booked, status, revision, updated_at FROM stall_bookings ORDER BY stall').all();
    const bookings=result.results.map(rowBooking);return json({bookings,updatedAt:new Date().toISOString()});
   }
   if(!path.startsWith('/api/admin/'))return fail('Not found.',404);
@@ -81,12 +88,19 @@ export async function handleAPI(request,env,ctx){
   const match=path.match(/^\/api\/admin\/bookings\/(\d{1,3})$/);
   if(match&&request.method==='PUT'){
    const stall=Number(match[1]),input=await bodyJSON(request);
-   if(stall<1||stall>193||typeof input.booked!=='boolean'||!Number.isSafeInteger(input.revision)||input.revision<0||input.revision>2147483646)return fail('Invalid stall booking update.');
+   const hasStatus=Object.hasOwn(input,'status'),hasBooked=Object.hasOwn(input,'booked');
+   // Old clients may still send one boolean; both representations together are
+   // ambiguous and are rejected rather than allowing one to override the other.
+   if(stall<1||stall>193||hasStatus===hasBooked||!Number.isSafeInteger(input.revision)||input.revision<0||input.revision>2147483646)return fail('Invalid stall booking update.');
+   const status=hasStatus?input.status:typeof input.booked==='boolean'?(input.booked?'sold_out':'available'):null;
+   const statusCode=statusNames.indexOf(status);
+   if(statusCode<0)return fail('Invalid stall booking status.');
+   const booked=statusCode===0?0:1;
    const updatedAt=new Date().toISOString();
    const row=input.revision===0
-    ?await env.DB.prepare('INSERT INTO stall_bookings (stall, booked, revision, updated_at) VALUES (?, ?, 1, ?) ON CONFLICT(stall) DO NOTHING RETURNING stall, booked, revision, updated_at').bind(stall,input.booked?1:0,updatedAt).first()
-    :await env.DB.prepare('UPDATE stall_bookings SET booked = ?, revision = revision + 1, updated_at = ? WHERE stall = ? AND revision = ? RETURNING stall, booked, revision, updated_at').bind(input.booked?1:0,updatedAt,stall,input.revision).first();
-   if(!row){const current=await env.DB.prepare('SELECT stall, booked, revision, updated_at FROM stall_bookings WHERE stall = ?').bind(stall).first();return json({error:'This stall was updated in another session. Review the latest status and try again.',booking:rowBooking(current)},409);}
+    ?await env.DB.prepare('INSERT INTO stall_bookings (stall, booked, status, revision, updated_at) VALUES (?, ?, ?, 1, ?) ON CONFLICT(stall) DO NOTHING RETURNING stall, booked, status, revision, updated_at').bind(stall,booked,statusCode,updatedAt).first()
+    :await env.DB.prepare('UPDATE stall_bookings SET booked = ?, status = ?, revision = revision + 1, updated_at = ? WHERE stall = ? AND revision = ? RETURNING stall, booked, status, revision, updated_at').bind(booked,statusCode,updatedAt,stall,input.revision).first();
+   if(!row){const current=await env.DB.prepare('SELECT stall, booked, status, revision, updated_at FROM stall_bookings WHERE stall = ?').bind(stall).first();return json({error:'This stall was updated in another session. Review the latest status and try again.',booking:rowBooking(current)},409);}
    return json({booking:rowBooking(row)});
   }
   return fail('Not found.',404);

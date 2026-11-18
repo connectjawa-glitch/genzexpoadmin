@@ -1,24 +1,24 @@
 {
   "schema": 1,
-  "release": "937c797c2940689a",
+  "release": "f4cdcbaf668f40cd",
   "algorithm": "sha256-normalized-code-v1",
   "entry": "index.html",
   "files": [
     {
       "path": "admin-mobile.css",
-      "sha256": "e14a1ed0a17543e5350799d6c373ef5661d02cf5dd03358be1552d035295a55a"
+      "sha256": "97069a911c742b6e5def5803c80700c4148ffe00ebc0d7bd368599148b8e2271"
     },
     {
       "path": "admin.css",
-      "sha256": "62551d244fdc2c01e9eb9e6581a9210cfd9abd2deaf33a781c0f94fabd4e59cb"
+      "sha256": "e2e38bbc324b757ebaff07884237d674a5d65315f64e9450e58ace263100995c"
     },
     {
       "path": "admin.js",
-      "sha256": "2a108b1d0f422f6ab0836f969d1589dff95124f8cdb2bb8064c577f627fe94ff"
+      "sha256": "6c3f43853527e5421b0e19b6d5a283a8986d3edab9bd1ba4eed026195579c3f0"
     },
     {
       "path": "app.js",
-      "sha256": "0dd4ef3f817ccd8671667dc3fba7f1c96b877fed22d6d47c7ab7d39b3c590dc9"
+      "sha256": "6e49c7c666b03c9b9ad7e5e1008844784f11707c68d8cba3477285f7ecb8692d"
     },
     {
       "path": "assets/vendor/OrbitControls.js",
@@ -30,19 +30,19 @@
     },
     {
       "path": "booking-status.css",
-      "sha256": "0540481b02c216156282d731fe8979238f0225f8d1be0f1397005e8e2839ecda"
+      "sha256": "8d23fbcd07cae6fbc04640d7795f994c3b483da7f515819adbfce6e79a179a00"
     },
     {
       "path": "booking-status.js",
-      "sha256": "fe845d19441f2df8ae64a53d003c1fe3ee7898517a4f775363a3a9169735725f"
+      "sha256": "f3d81cfbebbe604ef85d38963b253f709d6bb5e924a39f5293cd8be938f25efb"
     },
     {
       "path": "canvas-scene.js",
-      "sha256": "c0cb52e95d83952dec67e01a2b9070dfb3858ba574ff71157d600d84f0df9631"
+      "sha256": "cb3d6af8204016381e9dc9945f4cdd2067f898b2a209d14229346d0913cb2bdf"
     },
     {
       "path": "circulation.js",
-      "sha256": "a45f5be83148508a4b1480487b95bc42182bba1aeaf6792bca74c4b1efe71813"
+      "sha256": "e6e10ea01cb6feda78d1aad913ef6ac75fe0029f978a86a87d76fc22c6c870fa"
     },
     {
       "path": "data.js",
@@ -62,7 +62,7 @@
     },
     {
       "path": "i18n.js",
-      "sha256": "ba87d50a9a555b14282dc691095f61b20890d471c4725bbe051c126978e7c940"
+      "sha256": "b65dc0a763fd3a9526795f5dfc947e2c868eb361a30a0045c63a7f8549241051"
     },
     {
       "path": "icons.js",
@@ -74,15 +74,23 @@
     },
     {
       "path": "plan-view.js",
-      "sha256": "0127fea3350c1cc83f0168e784e816b6bb088eb824095e8121e6e951f222c02f"
+      "sha256": "fe86a43d4a0068211b260384ffa96a6c300126408c695c9844cd002302a3c697"
     },
     {
       "path": "scene.js",
-      "sha256": "8aac208bc1ab0ee395e25139f44817abca4685ee3f87e9ced7afe8aac9ad9149"
+      "sha256": "84c5e9f4d320a460f7e44de905878ccea774d15847b74e32ed5dba62bdf9273e"
     },
     {
       "path": "selection-view.js",
       "sha256": "1f3bf34d4561f8e79ad4afd686db069e98a4cf59a221526f03612b814c4319a6"
+    },
+    {
+      "path": "status-notice.js",
+      "sha256": "76eb7e1b84b3d9ec45e16b83b11f0583234b70f02d64f5322610d079701744ca"
+    },
+    {
+      "path": "status-policy.js",
+      "sha256": "cf237f232c369a0aa4751af54f0ce0726c3ce5a4d8fcfeff432d48c539baf96a"
     },
     {
       "path": "style.css",
@@ -90,7 +98,7 @@
     },
     {
       "path": "whatsapp.js",
-      "sha256": "490b4deebf6fa83c1d36f5f2b30e83b7f86fe7378853e1d3d5304b43dad81ec3"
+      "sha256": "b355f8969940dc6a53b7e61f1e32ad540ef1095c28023fcecbbb29ee0f27f045"
     }
   ]
 }

@@ -16,5 +16,10 @@ assert.equal((await worker.fetch(new Request('https://expo.example/worker/api.js
 assert.equal((await worker.fetch(new Request('https://expo.example/server/index.js'),{})).status,404);
 assert.equal((await worker.fetch(new Request('https://expo.example/drizzle/0000_booking_admin.sql'),{})).status,404);
 assert.equal((await worker.fetch(new Request('https://expo.example/api/admin/session'),{})).status,503,'Missing backend configuration fails closed');
-const journal=JSON.parse(await fs.readFile('drizzle/meta/_journal.json','utf8'));assert.equal(journal.entries.length,1);assert.equal(journal.entries[0].tag,'0000_booking_admin');
+const journal=JSON.parse(await fs.readFile('drizzle/meta/_journal.json','utf8'));
+const migrations=(await fs.readdir('drizzle')).filter(name=>name.endsWith('.sql')).sort();
+assert.equal(journal.entries[0].tag,'0000_booking_admin');
+assert.equal(journal.entries.length,2,'Initial schema plus appended status-column migration');
+assert.deepEqual(journal.entries.map(entry=>entry.tag+'.sql'),migrations);
+for(const file of migrations){assert.deepEqual(await fs.readFile('dist/drizzle/'+file),await fs.readFile('drizzle/'+file),'Deployment includes the exact committed migration');assert.equal((await worker.fetch(new Request('https://expo.example/drizzle/'+file),{})).status,404,'Migration SQL is not a public static asset');}
 console.log('PASS: deployable Worker, compressed size, preserved public/admin content and backup, static security routing, private source exclusion and committed migration metadata.');

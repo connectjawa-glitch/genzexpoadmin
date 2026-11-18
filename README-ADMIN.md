@@ -7,3 +7,5 @@ These are two components of the same website, not two independent deployments. T
 From the restored project run `npm ci`, `npm run build`, then `npm run check`. See README.md for the Worker/D1 hosting setup and the server-only ADMIN_PASSWORD_HASH runtime secret. The existing `.openai/hosting.json` retains the original Site ID; use it only when updating that same Site.
 
 The admin page is served at /admin. API requests use the same origin, and the public map reads the shared /api/bookings endpoint. Keep the backend and website together when deploying the restored project.
+
+Stall controls support Available, Reserved and Sold out with an explicit Save action. Status filters and counters use the same three labels. Existing Booked records are preserved as Sold out when the appended status-column migration is applied; the migration does not reset or backfill records. Administrators can change any status later. Public stall-specific enquiries check the latest status before opening WhatsApp.

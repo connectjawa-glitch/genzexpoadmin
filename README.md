@@ -2,7 +2,7 @@
 
 Password-protected stall administration and shared booking backend for **Erode Genz Agri Expo 2027**.
 
-Admins can mark or unmark any of the 193 stalls. The public map receives the saved Booked tags. This repository contains the admin frontend, mobile styles, Worker API, D1 schema/migrations, tests and build tools. Runtime credentials and live database contents are excluded.
+Admins can set any of the 193 stalls to **Available**, **Reserved** or **Sold out**, then save the change. The public map displays Reserved and Sold out tags; sold-out stalls block enquiry and reserved drafts include a warning. This repository contains the admin frontend, mobile styles, Worker API, D1 schema/migrations, tests and build tools. Runtime credentials and live database contents are excluded.
 
 The public website is in [connectjawa-glitch/genzexpo](https://github.com/connectjawa-glitch/genzexpo).
 
@@ -16,6 +16,7 @@ The admin sign-in page is available at `/` and `/admin`. Its public-hall links p
 npm run build:vercel
 npm run check:vercel
 node verify-admin.mjs
+node verify-admin-client.mjs
 ```
 
 Vercel functions under `api/` relay only the booking feed, admin session, sign-in, sign-out and stall updates to the existing backend at `https://erode-genz-agri-expo-2027.surprisingiris2.chatgpt.site`. This preserves the existing admin password, database and public Booked tags. The original backend must remain deployed. No password, database export or production session is copied into this repository or the static output.
@@ -23,6 +24,8 @@ Vercel functions under `api/` relay only the booking feed, admin session, sign-i
 The relay checks the portal's incoming origin before translating the upstream origin, accepts only the admin session cookie, rejects redirects, and disables API caching. Session cookies are secure, HTTP-only and host-only on the admin portal. Sign-in on the original Site and sign-in on Vercel use separate browser sessions. The backend's login throttle can be shared by requests from Vercel's outgoing IP; wait for its stated retry interval if it is reached.
 
 `EXPO_BACKEND_ORIGIN` is an optional **server-only** Vercel environment variable for moving the backend later. It must be an HTTPS origin without a trailing slash, path or query, serving the same authenticated API and booking database. Leave it unset for the existing backend. Database/password secrets remain on that backend; do not add them to frontend environment variables.
+
+The appended status-column migration is schema-only. Existing Booked records remain Sold out without a data backfill or reset. Apply migrations on the Worker/D1 backend before deploying the updated admin UI; the Vercel relay itself does not run database migrations. Named status updates and legacy boolean updates both retain revision conflict checks. An administrator can change any saved status later.
 
 ## Combine the components and build
 

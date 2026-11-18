@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node verify.mjs && node verify-view.mjs && node verify-whatsapp.mjs && node verify-booking-status.mjs && node verify-admin.mjs && node verify-release.mjs && node verify-worker.mjs && node verify-downloads.mjs",
+    "check": "node verify.mjs && node verify-view.mjs && node verify-whatsapp.mjs && node verify-booking-status.mjs && node verify-admin.mjs && node verify-admin-client.mjs && node verify-release.mjs && node verify-worker.mjs && node verify-downloads.mjs",
+    "check:admin": "node verify-admin.mjs && node verify-admin-client.mjs && node verify-vercel.mjs",
     "prepare-release": "node prepare-release.mjs",
     "build": "node prepare-release.mjs && python backup-source.py && node build-worker.mjs",
     "build:vercel": "node build-vercel.mjs",

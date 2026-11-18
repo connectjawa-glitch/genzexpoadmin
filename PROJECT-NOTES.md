@@ -2,7 +2,9 @@
 
 ## Booking administration
 
-`/admin` is a separate password-protected booking portal. The public site remains public. Choose a hall/stall and use **Mark booked** or **Remove booked tag**; the server confirms each saved edit. The public map refreshes organiser booking tags every 20 seconds while visible and when revisited. Unmarked stalls are not a promise of availability.
+`/admin` is a separate password-protected booking portal. Choose a hall/stall, select **Available**, **Reserved** or **Sold out**, then save; the server confirms each edit. The public map refreshes tags every 20 seconds while visible and when revisited. Reserved stalls show a warning and include their status in the WhatsApp draft. Sold-out stalls show a popup and cannot be selected for enquiry. Stall-specific WhatsApp handoffs require a fresh status check. Availability and booking terms still require organiser confirmation.
+
+The appended schema-only migration adds a three-state status without rewriting booking records. Existing Booked records resolve to Sold out. Legacy boolean API clients remain compatible; new clients send a named status and revision. The original migration and admin password remain unchanged.
 
 Booking records and hashed admin sessions use the Sites-provisioned D1 `DB` binding. The schema and generated initial migration are in `db/` and `drizzle/`; future schema changes require new migrations. No initial booked stalls are invented or imported. Status records persist across site releases.
 
@@ -43,7 +45,7 @@ Run `node verify.mjs`. It validates stall identifiers, dimensions/bounds, tariff
 
 ## Hall explorer revision
 
-The map now uses `circulation.js` as a single source for 19 printed-direction lanes and interrupted perimeter walls. `plan-view.js` handles accessible SVG selection, pan, pinch, zoom and spatial keyboard selection. `canvas-scene.js` supplies a fully interactive orthographic 3D renderer when WebGL is not supported; both renderers share selection state and source direction data. The upper-left Hall2 exit, lower-right Hall2 entry and small staircase above Hall1’s toilet are represented. The tour uses lane chapters, not invented closed circulation loops. See records/circulation-audit.json.
+The map uses `circulation.js` as a single source for 20 directed lanes, interrupted perimeter walls and three masonry pathway barriers matching the supplied close-ups. The divider between stalls 31/89 reaches the 46/88 block and splits the top cross-aisle. The divider beside the 28/45 block separates the toilet/stair link from the main aisle. Hall 2's LED/173 boundary remains separated from the open aisle beside 172/174. Arrows and visitors stop before barriers; that aisle remains open. `plan-view.js` handles accessible SVG selection, pan, pinch, zoom and spatial keyboard selection. `canvas-scene.js` supplies an interactive orthographic 3D fallback. The tour uses lane chapters, not invented closed circulation loops. See records/circulation-audit.json.
 
 ## Renderer release preparation
 
@@ -57,4 +59,4 @@ Run `node prepare-release.mjs` after code/style changes, then `npm run check` to
 
 `/records/erode-genz-admin.zip` contains the admin portal, backend and build/database setup. `/records/erode-genz-website.zip` contains the public pages, hall maps and assets. Both preserve the same project folder; extract both together for the complete build. See README-ADMIN.md and README-WEBSITE.md.
 
-The server selects the existing compressed ZIP entries from the complete source backup, preserving exact file contents without embedding duplicate large archives. `npm run split-zips` creates the same two ZIPs in ./exports for local delivery. Passwords, live booking records, sessions and generated server output are excluded as documented.
+The server selects the existing compressed ZIP entries from the complete source backup, preserving exact file contents without embedding duplicate large archives. `npm run split-zips` creates the same two ZIPs in /workspace/exports for local delivery. Passwords, live booking records, sessions and generated server output are excluded as documented.

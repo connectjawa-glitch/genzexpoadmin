@@ -8,6 +8,13 @@
       "when": 1794942686195,
       "tag": "0000_booking_admin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1794985311110,
+      "tag": "0001_nostalgic_lucky_pierre",
+      "breakpoints": true
     }
   ]
 }

@@ -56,7 +56,7 @@ for(const hall of[1,2]){
   for(let i=1;i<traffic.length;i++)assert.ok(traffic[i]-traffic[i-1]>2,'Walkers overlap on their lane');
  }
 }
-console.log('PASS: arrows and people share all 19 one-way lanes, with fixed spacing and endpoint fades.');
+console.log(`PASS: arrows and people share all ${Object.values(circulation).reduce((sum,nav)=>sum+nav.lanes.length,0)} one-way lanes, with fixed spacing and endpoint fades.`);
 
 // Exercise the real WebGL mesh and animation code with Three's CPU geometry.
 // Only import specifiers change to match the browser's existing import map.
@@ -75,6 +75,14 @@ for(const hall of[1,2]){
  e.renderer={capabilities:{getMaxAnisotropy:()=>1},render(){}};
  let controlDelta=null;e.controls={target:new THREE.Vector3(),update(dt){controlDelta=dt;e.camera.lookAt(this.target);e.camera.updateMatrixWorld();},autoRotate:false};
  e.clock={getDelta:()=>.05};e.animTime=1;e.setHall(hall);
+ for(const barrier of circulation[hall].barriers){
+  const body=e.world.children.find(o=>o.userData.barrier===barrier.id),cap=e.world.children.find(o=>o.userData.barrierCap===barrier.id);
+  assert.ok(body&&cap,`Missing physical masonry: ${barrier.id}`);assert.ok(body.material.map?.isCanvasTexture,'Masonry has no brick texture');
+  assert.equal(body.material.map.wrapS,THREE.RepeatWrapping);assert.equal(body.scale.x,barrier.w);assert.equal(body.scale.z,barrier.d);
+  assert.ok(Math.abs(body.position.x-(barrier.x+barrier.w/2-halls[hall].width/2))<1e-10);assert.ok(Math.abs(body.position.z-(barrier.z+barrier.d/2-halls[hall].depth/2))<1e-10);
+  assert.ok(Math.abs(cap.position.y-cap.scale.y/2-(body.position.y+body.scale.y/2))<1e-10,'Masonry cap overlaps its vertical body');
+  assert.equal(cap.material,e.mat.rail);assert.ok(!e.pickables.includes(body)&&!e.pickables.includes(cap),'Divider swallowed stall picking');
+ }
  const caps=e.world.children.filter(o=>o.geometry?.type==='ExtrudeGeometry');assert.equal(caps.length,1);
  assert.equal(caps[0].material[0],e.mat.floor);assert.equal(caps[0].material[1],e.mat.base);
  assert.equal(e.world.children.filter(o=>o.geometry?.type==='ShapeGeometry'&&o.material===e.mat.floor).length,0,'Duplicate floor face causes brown depth fighting');
@@ -86,6 +94,9 @@ for(const hall of[1,2]){
   assert.ok(heading.dot(movement.normalize())>.999999,`Arrow/walker mismatch: ${hall}/${i}`);
   for(const limb of e.people[i].limbs)assert.ok(Math.abs(limb.shoulder.rotation.x+limb.hip.rotation.x*.8)<1e-10);
  });
+ const wasPaused=e.paused,previousTime=e.animTime;e.paused=true;
+ for(let time=0;time<120;time+=.43){e.animTime=time;e.animate();for(const arrow of e.arrows){if(arrow.mesh.material.opacity<=1e-8)continue;arrow.mesh.updateMatrixWorld(true);const box=new THREE.Box3().setFromObject(arrow.mesh);for(const barrier of circulation[hall].barriers){const corner=e.point(barrier.x-.04,barrier.z-.04);assert.ok(box.max.x<=corner.x||box.min.x>=corner.x+barrier.w+.08||box.max.z<=corner.z||box.min.z>=corner.z+barrier.d+.08,`Visible arrow extends through masonry: ${hall}/${barrier.id}`);}}}
+ e.paused=wasPaused;e.animTime=previousTime;
  for(const booth of e.booths){
   e.select(booth.s.n,true);assert.equal(e.selectionRig.material.depthWrite,false);assert.equal(e.selectionRig.material.depthTest,false);assert.equal(e.selectionRig.renderOrder,6);assert.equal(booth.floor.castShadow,false);const target=e.focusTarget;
   assert.ok(target.target.equals(booth.floor.position));
@@ -97,6 +108,12 @@ for(const hall of[1,2]){
   }
  }
  e.clear();assert.equal(e.focusTarget,null);
+ const statusStall=e.booths[0],cameraPose=e.camera.position.clone(),selectedBefore=e.selected,focusBefore=e.focusTarget;
+ e.setBookings(new Set([statusStall.s.n]),new Map([[statusStall.s.n,'reserved']]));const marker=statusStall.bookingMarker;
+ assert.ok(marker.visible);assert.equal(marker.userData.glyph,'R');assert.equal(marker.userData.badge.material.color.getHexString(),'bd8422');
+ e.setBookings(new Set([statusStall.s.n]),new Map([[statusStall.s.n,'sold_out']]));assert.equal(statusStall.bookingMarker,marker);assert.equal(marker.userData.glyph,'S');assert.equal(marker.userData.badge.material.color.getHexString(),'a83c58');
+ e.setBookings(new Set([statusStall.s.n]),new Map(e.booths.map(b=>[b.s.n,'available'])));assert.equal(marker.visible,false);assert.equal(e.booths.filter(b=>b.bookingMarker).length,1,'Available statuses clutter the map with badges');
+ assert.ok(e.camera.position.equals(cameraPose));assert.equal(e.selected,selectedBefore);assert.equal(e.focusTarget,focusBefore);e.setBookings(new Set());
  for(const b of e.booths)assert.equal(b.floor.material.color.getHexString(),new THREE.Color(colors[b.s.color]).getHexString());
  let disposed=false,sharedDisposed=false;e.booths[0].floor.material.addEventListener('dispose',()=>disposed=true);e.mat.floor.addEventListener('dispose',()=>sharedDisposed=true);e.setHall(hall===1?2:1);assert.ok(disposed);assert.equal(sharedDisposed,false);assert.equal(e.world.children.filter(o=>o.geometry?.type==='ExtrudeGeometry').length,1);
 }
@@ -124,7 +141,7 @@ console.log('PASS: price bubbles clear selected tiles; compatible 3D labels rend
 // A tap selects once; rotating away and back or ending a pinch must never be
 // misinterpreted as a click that suddenly starts a selection zoom.
 const clicks=[],events=new Map(),pickCanvas={addEventListener(type,fn){if(!events.has(type))events.set(type,[]);events.get(type).push(fn);},getBoundingClientRect:()=>({left:0,top:0,width:900,height:650}),style:{}};
-const tapProbe=Object.create(WebGLExplorer.prototype);Object.assign(tapProbe,{pointer:new THREE.Vector2(),ray:{setFromCamera(){},intersectObjects:()=>[{object:{userData:{n:58}}}]},pickables:[],camera:{},onSelect:n=>clicks.push(n),callbacks:{}});tapProbe.bindPicking(pickCanvas);
+const tapProbe=Object.create(WebGLExplorer.prototype);Object.assign(tapProbe,{pointer:new THREE.Vector2(),ray:{setFromCamera(){},intersectObjects:()=>[{object:{userData:{n:58}}}]},pickables:[],camera:{},onSelect:n=>clicks.push(n),callbacks:{},bookings:new Set([58]),statuses:new Map([[58,'sold_out']])});tapProbe.bindPicking(pickCanvas);
 const fire=(type,id,x=20,y=20,button=0)=>{for(const fn of events.get(type)||[])fn({pointerId:id,clientX:x,clientY:y,button,buttons:type==='pointermove'?1:0});};
 fire('pointerdown',1);fire('pointerup',1);assert.deepEqual(clicks,[58]);clicks.length=0;
 fire('pointerdown',1);fire('pointermove',1,140,20);fire('pointermove',1,20,20);fire('pointerup',1);assert.deepEqual(clicks,[],'Rotate-return triggered an accidental zoom');
@@ -137,6 +154,7 @@ console.log('PASS: drag-return, pinch, pointer cancellation and right-click neve
 // Orbit scale must stay constant for a complete turn. Box side visibility must
 // match the viewing quadrant, and walkers must join the scene depth ordering.
 const rotation=new CanvasExplorer(null,null,()=>({t:k=>k}));rotation.setHall(1);Object.assign(rotation,{ctx:context,width:900,height:650,dpr:1,arrive:1,time:10});
+assert.ok(rotation.barrierSegments.every(b=>Math.max(b.w,b.d)<=3),'Long masonry wall must be depth-sorted in short chunks');
 let scale=null;
 for(let angle=0;angle<Math.PI*2;angle+=Math.PI/12){rotation.camera.yaw=angle;rotation.draw();if(scale==null)scale=rotation.scale;else assert.ok(Math.abs(rotation.scale-scale)<1e-10,'Hall changes apparent scale during rotation');}
 for(const angle of[.4,2.2,3.7,5.4]){
@@ -144,11 +162,27 @@ for(const angle of[.4,2.2,3.7,5.4]){
  assert.ok(faces[0].every(p=>p[2]===(Math.cos(angle)>=0?24:20)),'Wrong north/south face');
  assert.ok(faces[1].every(p=>p[0]===(Math.sin(angle)>=0?18:10)),'Wrong east/west face');
 }
-const depthOrder=[],drawBooth=rotation.drawStall,drawFacility=rotation.drawFacility,drawWalker=rotation.drawPerson;
+const depthOrder=[],drawBooth=rotation.drawStall,drawFacility=rotation.drawFacility,drawWalker=rotation.drawPerson,drawBarrier=rotation.drawMasonryBarrier;
 rotation.drawStall=function(s,...args){depthOrder.push({kind:'stall',depth:this.project(s.x+s.w/2,0,s.z+s.d/2).depth});return drawBooth.call(this,s,...args);};
 rotation.drawFacility=function(f){depthOrder.push({kind:'facility',depth:this.project(f.x+f.w/2,0,f.z+f.d/2).depth});return drawFacility.call(this,f);};
 rotation.drawPerson=function(p){depthOrder.push({kind:'walker',depth:this.project(p.p.x,.9,p.p.z).depth});return drawWalker.call(this,p);};
-rotation.draw();for(let i=1;i<depthOrder.length;i++)assert.ok(depthOrder[i].depth>=depthOrder[i-1].depth-1e-10,'A walker was painted over foreground geometry');
+rotation.drawMasonryBarrier=function(b){depthOrder.push({kind:'barrier',depth:this.project(b.x+b.w/2,b.height/2,b.z+b.d/2).depth});return drawBarrier.call(this,b);};
+rotation.draw();assert.ok(depthOrder.some(o=>o.kind==='barrier'));for(let i=1;i<depthOrder.length;i++)assert.ok(depthOrder[i].depth>=depthOrder[i-1].depth-1e-10,'A walker was painted over foreground geometry');
 assert.ok(depthOrder.findIndex(o=>o.kind==='walker')<depthOrder.map(o=>o.kind).lastIndexOf('stall'));
 rotation.camera.yaw=Math.PI*5+.4;rotation.select(65,true);assert.equal(rotation.goal.yaw,rotation.camera.yaw,'Selection reset the viewing angle');
 console.log('PASS: full-turn scale is stable, side faces match all four quadrants, walkers respect scene depth, and selection preserves the viewing angle.');
+
+// Physical dividers render in the flat plan too. Status changes only add small
+// R/S accents and aria text; available/unknown never produce map badge clutter.
+for(const hall of[1,2]){
+ const flat=Object.create(PlanView.prototype);Object.assign(flat,{hall,selected:null,camera:{x:0,y:0,w:114,h:110},locale:()=>({t:k=>k}),el:{querySelector:()=>null},update(){},bind(){}});flat.render();
+ for(const barrier of circulation[hall].barriers)assert.ok(flat.el.innerHTML.includes(`data-barrier="${barrier.id}"`));
+ assert.ok(flat.el.innerHTML.includes('url(#masonry-bond)'));
+}
+const classes=new Set(),symbol={},circle={setAttribute(k,v){this[k]=v;}},marker={style:{},querySelector:q=>q==='circle'?circle:symbol},tile={dataset:{mapStall:'65'},classList:{toggle(k,on){on?classes.add(k):classes.delete(k);}},setAttribute(k,v){this[k]=v;},querySelector:q=>q==='.map-booking-marker'?marker:null};
+const flat=Object.create(PlanView.prototype);Object.assign(flat,{hall:1,selected:65,category:'all',directions:true,camera:{x:3,y:4,w:50,h:50},locale:()=>({t:k=>k}),el:{querySelector:()=>null,querySelectorAll:()=>[tile]},projectPin(){}});const flatCamera=flat.camera;
+for(const [status,glyph,color] of[['reserved','R','#bd8422'],['sold_out','S','#a83c58']]){flat.setBookings(new Set([65]),new Map([[65,status]]));assert.equal(marker.style.display,'block');assert.equal(symbol.textContent,glyph);assert.equal(circle.fill,color);assert.ok(tile['aria-label'].includes(status==='reserved'?'bookingReserved':'bookingSoldOut'));assert.equal(tile['aria-disabled'],undefined);assert.equal(flat.camera,flatCamera);}
+flat.setBookings(new Set([65]),new Map([[65,'available']]));assert.equal(marker.style.display,'none');assert.ok(tile['aria-label'].includes('bookingAvailable'));flat.setBookings(new Set());assert.equal(marker.style.display,'none');
+const glyphs=[],bookedCanvas=new CanvasExplorer(null,null,()=>({t:k=>k}));bookedCanvas.setHall(1);Object.assign(bookedCanvas,{ctx:{save(){},restore(){},beginPath(){},arc(){},fill(){},fillText:text=>glyphs.push(text)},width:900,height:650,scale:3});
+const stall=stalls[64],canvasCamera={...bookedCanvas.camera},canvasGoal={...bookedCanvas.goal};for(const status of['reserved','sold_out','available']){bookedCanvas.setBookings(new Set([65]),new Map([[65,status]]));bookedCanvas.drawBookingMarker(stall);}assert.deepEqual(glyphs,['R','S']);assert.deepEqual(bookedCanvas.camera,canvasCamera);assert.deepEqual(bookedCanvas.goal,canvasGoal);
+console.log('PASS: physical masonry appears in all map modes; distinct R/S status accents preserve colors, camera and tap callbacks; available statuses create no map badges.');
