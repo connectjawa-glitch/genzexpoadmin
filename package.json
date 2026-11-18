@@ -1,0 +1,16 @@
+{
+  "name": "erode-genz-agri-expo-2027",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node verify.mjs && node verify-view.mjs && node verify-whatsapp.mjs && node verify-booking-status.mjs && node verify-admin.mjs && node verify-release.mjs && node verify-worker.mjs && node verify-downloads.mjs",
+    "prepare-release": "node prepare-release.mjs",
+    "build": "node prepare-release.mjs && python backup-source.py && node build-worker.mjs",
+    "db:generate": "drizzle-kit generate",
+    "split-zips": "node split-archives.mjs"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.11",
+    "drizzle-orm": "^0.45.4"
+  }
+}

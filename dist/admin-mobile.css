@@ -1,0 +1,103 @@
+/* Phone/tablet presentation only; booking and authentication stay unchanged. */
+@media(max-width:850px){
+ body,main,.dashboard,.booking-workspace,.stall-browser,.stall-detail{min-width:0}
+ .button,.header-actions .button,.sync-status .button,.clear-button,.password-wrap button{min-height:44px}
+ .clear-button{width:44px;height:44px;flex-shrink:0}
+ .site-link{display:inline-flex;align-items:center;min-height:44px;font-size:12px;line-height:1.5}
+ .site-link span{margin-left:8px}
+ .page-heading{flex-wrap:wrap}
+ .page-heading>div{min-width:0;flex:1 1 380px}
+ .page-heading p{font-size:14px}
+ .overview{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .overview .sync-status{flex-wrap:wrap;gap:10px}
+ .sync-status>span{flex:1 1 180px;font-size:12px;overflow-wrap:anywhere}
+ .sync-status .button{font-size:13px}
+ .filters{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.55fr)}
+ .search-form input,.status-filter select{font-size:16px;min-height:48px}
+ .search-form button{min-width:48px;min-height:48px;padding:12px}
+ .status-filter{min-width:0}
+ .status-filter select{width:100%;min-width:0;max-width:none}
+ .hall-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hall-tabs button{min-width:0;min-height:76px;font-size:16px}
+ .hall-tabs button>span,.hall-tabs button small{font-size:12px}
+ .browser-caption p,.browser-caption>span,.legend>span{font-size:11px}
+ .stall-grid{max-height:clamp(280px,52svh,540px);overscroll-behavior-y:auto;scroll-padding-block:12px;-webkit-overflow-scrolling:touch}
+ .stall-card{min-height:110px;touch-action:manipulation}
+ .stall-card .card-tier{font-size:12px}
+ .card-status{font-size:11px}
+ .stall-detail{scroll-margin-block:16px}
+ .selected-hall,.detail-price>span,.detail-specs dt,.save-box>p:not(.field-error):not(.save-success),.detail-note,.source-note{font-size:12px}
+ .detail-specs{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .detail-specs dd{font-size:13px;overflow-wrap:anywhere}
+ .tier-chip,.status-pill,.save-box h3,.save-success,.field-error{font-size:13px}
+ .save-box>.button{min-height:50px;font-size:16px}
+ .page-status{font-size:13px}
+}
+@media(max-width:600px){
+ .admin-header{display:flex;flex-direction:column;align-items:stretch;gap:8px;padding:16px max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left))}
+ .brand{align-self:flex-start;max-width:100%}
+ .brand img{width:180px;max-width:100%;height:auto}
+ .header-actions{width:100%;justify-content:space-between;gap:12px;min-width:0}
+ .site-link{max-width:none;flex-wrap:wrap}
+ .header-actions .button{font-size:13px;padding:10px 14px}
+ .dashboard{padding:24px 16px 32px}
+ .page-heading{gap:12px}
+ .page-heading>div{flex-basis:100%}
+ .page-heading h1{font-size:clamp(28px,7.5vw,36px);max-width:none;line-height:1.15}
+ .page-heading p{line-height:1.65}
+ .eyebrow{font-size:10px}
+ .access-badge{margin:0;font-size:11px;padding:7px 10px}
+ .overview{margin-top:20px}
+ .overview>div{padding:15px 10px}
+ .overview span{font-size:11px}
+ .overview strong{font-size:28px}
+ .overview .sync-status{padding:12px}
+ .booking-workspace{gap:16px;margin-top:18px}
+ .browser-top{padding:12px}
+ .hall-tabs{gap:8px}
+ .hall-tabs button{padding:11px 12px;gap:5px 7px}
+ .hall-tabs button>span{font-size:11px}
+ .filters{grid-template-columns:minmax(0,1fr);padding:12px 12px 0;gap:10px}
+ .status-filter{width:100%}
+ .search-form input{padding:12px}
+ .status-filter select{padding:12px}
+ .browser-caption{padding:12px;align-items:flex-start;gap:10px}
+ .browser-caption p{max-width:210px}
+ .browser-caption>span{white-space:normal;text-align:right;flex:0 0 auto}
+ .stall-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:4px 12px 16px;scrollbar-gutter:auto}
+ .stall-card{padding:12px 9px 9px;min-width:0;gap:7px}
+ .stall-card strong{font-size:28px}
+ .legend{padding:12px;gap:8px 12px}
+ .legend>span{gap:6px}
+ .stall-detail{padding:20px;min-width:0}
+ .identity{justify-content:space-between;gap:12px;min-width:0}
+ .selected-number{font-size:60px}
+ .tier-chip{max-width:55%;overflow-wrap:anywhere}
+ .selected-hall{margin-top:10px}
+ .detail-price strong{font-size:30px}
+ .detail-specs{gap:14px}
+ .detail-note{line-height:1.65}
+ .auth-card{width:calc(100% - 32px);margin:24px auto 32px;padding:28px 24px;border-radius:16px}
+ .auth-card h1{font-size:32px;max-width:none;line-height:1.16}
+ .auth-card>p{font-size:14px;line-height:1.7}
+ .auth-card label{font-size:14px}
+ .auth-card .button{min-height:48px;font-size:15px}
+ .password-wrap input{min-height:50px;font-size:16px;padding:13px 12px}
+ .password-wrap button{min-width:64px;font-size:14px}
+ .lock-mark{right:24px;top:24px}
+ footer{padding:20px 16px max(20px,env(safe-area-inset-bottom));font-size:10px;line-height:1.6}
+}
+@media(max-width:359px){
+ .dashboard{padding-inline:12px}
+ .overview>div{padding-inline:8px}
+ .overview span{font-size:10px}
+ .overview strong{font-size:26px}
+ .hall-tabs button{padding-inline:10px}
+ .stall-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .browser-caption{flex-wrap:wrap}
+ .browser-caption p{max-width:none;flex:1 1 180px}
+ .browser-caption>span{text-align:left}
+ .stall-detail{padding:18px}
+ .auth-card{padding:26px 20px}
+ .auth-card h1{font-size:30px}
+}

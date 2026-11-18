@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "release": "937c797c2940689a",
+  "algorithm": "sha256-normalized-code-v1",
+  "entry": "index.html",
+  "files": [
+    {
+      "path": "admin-mobile.css",
+      "sha256": "e14a1ed0a17543e5350799d6c373ef5661d02cf5dd03358be1552d035295a55a"
+    },
+    {
+      "path": "admin.css",
+      "sha256": "62551d244fdc2c01e9eb9e6581a9210cfd9abd2deaf33a781c0f94fabd4e59cb"
+    },
+    {
+      "path": "admin.js",
+      "sha256": "2a108b1d0f422f6ab0836f969d1589dff95124f8cdb2bb8064c577f627fe94ff"
+    },
+    {
+      "path": "app.js",
+      "sha256": "0dd4ef3f817ccd8671667dc3fba7f1c96b877fed22d6d47c7ab7d39b3c590dc9"
+    },
+    {
+      "path": "assets/vendor/OrbitControls.js",
+      "sha256": "80efaadea4f8a636a65fb0bd08bfef62f3d93a0bb94e2e7500f23176c5c07f4e"
+    },
+    {
+      "path": "assets/vendor/three.module.js",
+      "sha256": "ce1fa418de16a19495a9f72495580e3015d7745c296d3ce0485897f902ddedfb"
+    },
+    {
+      "path": "booking-status.css",
+      "sha256": "0540481b02c216156282d731fe8979238f0225f8d1be0f1397005e8e2839ecda"
+    },
+    {
+      "path": "booking-status.js",
+      "sha256": "fe845d19441f2df8ae64a53d003c1fe3ee7898517a4f775363a3a9169735725f"
+    },
+    {
+      "path": "canvas-scene.js",
+      "sha256": "c0cb52e95d83952dec67e01a2b9070dfb3858ba574ff71157d600d84f0df9631"
+    },
+    {
+      "path": "circulation.js",
+      "sha256": "a45f5be83148508a4b1480487b95bc42182bba1aeaf6792bca74c4b1efe71813"
+    },
+    {
+      "path": "data.js",
+      "sha256": "93dc665012118f9a16727ceab1b2fa34d2fa1c8723bf3cdff308a78e216dec37"
+    },
+    {
+      "path": "enquiry.css",
+      "sha256": "81ed1f3a9034e892e8bca610fa48eb2518e4544c13cb3f9ed2253e6865fb3379"
+    },
+    {
+      "path": "explorer.css",
+      "sha256": "f71c022f57604e896589b80b4ea3caa59ce89971d4e0338686593e26a6f33df0"
+    },
+    {
+      "path": "hall-motion.js",
+      "sha256": "24f0a19964240a9d8e3225511e273ee9fc63469b89ae9b4422c95f2946e568e1"
+    },
+    {
+      "path": "i18n.js",
+      "sha256": "ba87d50a9a555b14282dc691095f61b20890d471c4725bbe051c126978e7c940"
+    },
+    {
+      "path": "icons.js",
+      "sha256": "7b5daa6e8fd4a9f2750ef94bdfc5d7ca6722ce54e90e0d9dc8f22a9f0a38d0c2"
+    },
+    {
+      "path": "mobile.css",
+      "sha256": "8f298bf5329d64519071633fde22b3a2ba11e72fdb1973575ce70c156f042d0b"
+    },
+    {
+      "path": "plan-view.js",
+      "sha256": "0127fea3350c1cc83f0168e784e816b6bb088eb824095e8121e6e951f222c02f"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "8aac208bc1ab0ee395e25139f44817abca4685ee3f87e9ced7afe8aac9ad9149"
+    },
+    {
+      "path": "selection-view.js",
+      "sha256": "1f3bf34d4561f8e79ad4afd686db069e98a4cf59a221526f03612b814c4319a6"
+    },
+    {
+      "path": "style.css",
+      "sha256": "626460f5defd38f93d09125452ec6133fc5989df74af59bfb77e742457035471"
+    },
+    {
+      "path": "whatsapp.js",
+      "sha256": "490b4deebf6fa83c1d36f5f2b30e83b7f86fe7378853e1d3d5304b43dad81ec3"
+    }
+  ]
+}

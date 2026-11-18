@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+.env*
+*.log
+
+.dev.vars*
+.wrangler/
+.sites-runtime/
+exports/
+dist/server/
+dist/.openai/
+dist/drizzle/
+dist/records/*.zip
