@@ -6,6 +6,24 @@ Admins can mark or unmark any of the 193 stalls. The public map receives the sav
 
 The public website is in [connectjawa-glitch/genzexpo](https://github.com/connectjawa-glitch/genzexpo).
 
+## Deploy this admin repository on Vercel
+
+Import this repository with **Root Directory `./`**. The committed `vercel.json` configures the **Other** framework, build command `node build-vercel.mjs`, and output directory `vercel-public`. Remove any dashboard overrides that still run the combined Worker build. No dependency installation or Python is required for the Vercel deployment.
+
+The admin sign-in page is available at `/` and `/admin`. Its public-hall links point to `https://genzexpo.vercel.app/#halls`. To verify locally, use Node.js 24 and run:
+
+```sh
+npm run build:vercel
+npm run check:vercel
+node verify-admin.mjs
+```
+
+Vercel functions under `api/` relay only the booking feed, admin session, sign-in, sign-out and stall updates to the existing backend at `https://erode-genz-agri-expo-2027.surprisingiris2.chatgpt.site`. This preserves the existing admin password, database and public Booked tags. The original backend must remain deployed. No password, database export or production session is copied into this repository or the static output.
+
+The relay checks the portal's incoming origin before translating the upstream origin, accepts only the admin session cookie, rejects redirects, and disables API caching. Session cookies are secure, HTTP-only and host-only on the admin portal. Sign-in on the original Site and sign-in on Vercel use separate browser sessions. The backend's login throttle can be shared by requests from Vercel's outgoing IP; wait for its stated retry interval if it is reached.
+
+`EXPO_BACKEND_ORIGIN` is an optional **server-only** Vercel environment variable for moving the backend later. It must be an HTTPS origin without a trailing slash, path or query, serving the same authenticated API and booking database. Leave it unset for the existing backend. Database/password secrets remain on that backend; do not add them to frontend environment variables.
+
 ## Combine the components and build
 
 Use Node.js 24 or newer and Python 3. Clone both repositories as siblings:

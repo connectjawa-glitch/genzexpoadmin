@@ -11,3 +11,5 @@ dist/server/
 dist/.openai/
 dist/drizzle/
 dist/records/*.zip
+vercel-public/
+.vercel/
