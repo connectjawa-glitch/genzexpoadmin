@@ -31,10 +31,17 @@ console.log(`PASS: ${laneCount} directed lanes clear all obstacles; sampled poin
 // Marked masonry is a physical blocker, not a flat decorative stripe. Keep the
 // top cross-aisle split, reroute below the stair-divider, and retain Hall 2's
 // vertical aisle alongside the LED/stall173 wall.
-assert.deepEqual(circulation[1].barriers.map(({id,x,z,w,d,height})=>({id,x,z,w,d,height})),[
- {id:'h1-upper-divider',x:55.2,z:0,w:.6,d:17,height:2.8},
- {id:'h1-stair-divider',x:39.7,z:74.4,w:.6,d:6.6,height:2.8}
+assert.equal(circulation[1].barriers.length,2);
+assert.deepEqual(circulation[1].barriers.filter(b=>b.id==='h1-upper-divider').map(({id,x,z,w,d,height})=>({id,x,z,w,d,height})),[
+ {id:'h1-upper-divider',x:55.2,z:0,w:.6,d:17,height:2.8}
 ]);
+const stairDivider=circulation[1].barriers.find(b=>b.id==='h1-stair-divider'),stall28=stalls.find(s=>s.n===28),stall45=stalls.find(s=>s.n===45),sharedSeam=stall28.x+stall28.w;
+assert.equal(sharedSeam,stall45.x,'Stalls28 and45 must share the divider seam');
+assert.ok(Math.abs(stairDivider.x+stairDivider.w/2-sharedSeam)<1e-10,'Divider must be centered BETWEEN stalls28 and45');
+assert.ok(Math.abs(stairDivider.z-(stall28.z+stall28.d))<1e-10);assert.ok(Math.abs(stairDivider.z-(stall45.z+stall45.d))<1e-10);
+assert.deepEqual([stairDivider.w,stairDivider.d,stairDivider.height],[.6,6.6,2.8]);
+const eastOf45=stall45.x+stall45.w+.9;assert.ok(!segmentHitsBox([eastOf45,stall45.z],[eastOf45,stairDivider.z+stairDivider.d],stairDivider,.4),'Divider must leave stall45 east aisle clear');
+const westLink=circulation[1].lanes.find(l=>l.id==='h1-left-link-west');assert.deepEqual(westLink.points,[[29.6,76.5],[19,76.5]]);assert.ok(westLink.points.every(p=>p[0]<stairDivider.x-.4),'Westbound arrows must stay left of the divider');
 assert.deepEqual(circulation[2].barriers.map(({id,x,z,w,d,height})=>({id,x,z,w,d,height})),[
  {id:'h2-led-divider',x:26.2,z:14,w:.6,d:44.5,height:2.8}
 ]);

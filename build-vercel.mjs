@@ -3,7 +3,7 @@ import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 // This component has its own entry page; the public website is a separate repo.
 const output = new URL('./vercel-public/', import.meta.url);
 const source = new URL('./dist/', import.meta.url);
-const files = ['admin.js', 'admin.css', 'admin-mobile.css', 'data.js', 'release.json', 'assets/event-recreated.png', 'assets/favicon.svg'];
+const files = ['admin.js', 'admin.css', 'admin-mobile.css', 'data.js', 'release.json', 'assets/event-recreated.png', 'assets/expo-logo-original.png', 'assets/favicon.svg'];
 let html = await readFile(new URL('admin.html', source), 'utf8');
 html = html.replace('class="brand" href="/"', 'class="brand" href="https://genzexpo.vercel.app/"')
   .replace('href="/#halls" class="site-link"', 'href="https://genzexpo.vercel.app/#halls" class="site-link"');

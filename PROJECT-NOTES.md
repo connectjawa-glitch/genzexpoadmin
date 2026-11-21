@@ -29,7 +29,7 @@ Use any ordinary HTTP static server pointed at `dist/`. In the managed Sites env
 
 ## Important source limitations
 
-Original image binaries were not available in the execution workspace. Images were read visually from chat. Original posters, exact logos, aerial venue photographs and QR payload are NOT backed up. Files named `*-recreated.png` are reference-derived image-generation reconstructions, not original logo extractions. `agri-future.png` is newly generated concept artwork, not venue photography. See `dist/records/asset-manifest.json`.
+The expo logo original is now preserved unchanged in `dist/assets/expo-logo-original.png` (supplied by the user through Drive on 21 November 2026). Original binaries for the earlier references were not available in the execution workspace. Images were read visually from chat. Original posters, other exact logos, aerial venue photographs and QR payload are NOT backed up. Files named `*-recreated.png` are reference-derived image-generation reconstructions, not original logo extractions. `agri-future.png` is newly generated concept artwork, not venue photography. See `dist/records/asset-manifest.json`.
 
 Hall 1's orange size legend is inconsistent with its total and tariff sheet; 114–116 have a specific size/color conflict. Hall 2 prints 198 where its price sheet requires 149; the page explicitly shows a source note. No dimension units, general admission policy, daily expo operating hours, named confirmed guests or live booking feed were supplied. Enquiry links open organiser phone numbers; no booking is submitted.
 
@@ -45,7 +45,7 @@ Run `node verify.mjs`. It validates stall identifiers, dimensions/bounds, tariff
 
 ## Hall explorer revision
 
-The map uses `circulation.js` as a single source for 20 directed lanes, interrupted perimeter walls and three masonry pathway barriers matching the supplied close-ups. The divider between stalls 31/89 reaches the 46/88 block and splits the top cross-aisle. The divider beside the 28/45 block separates the toilet/stair link from the main aisle. Hall 2's LED/173 boundary remains separated from the open aisle beside 172/174. Arrows and visitors stop before barriers; that aisle remains open. `plan-view.js` handles accessible SVG selection, pan, pinch, zoom and spatial keyboard selection. `canvas-scene.js` supplies an interactive orthographic 3D fallback. The tour uses lane chapters, not invented closed circulation loops. See records/circulation-audit.json.
+The map uses `circulation.js` as a single source for 20 directed lanes, interrupted perimeter walls and three masonry pathway barriers matching the supplied close-ups. The divider between stalls 31/89 reaches the 46/88 block and splits the top cross-aisle. The lower Hall 1 divider is centred on the shared boundary between stalls 28 and 45 and extends below the block; stall 45's east aisle remains clear. Hall 2's LED/173 boundary remains separated from the open aisle beside 172/174. Arrows and visitors stop before barriers; that aisle remains open. `plan-view.js` handles accessible SVG selection, pan, pinch, zoom and spatial keyboard selection. `canvas-scene.js` supplies an interactive orthographic 3D fallback. The tour uses lane chapters, not invented closed circulation loops. See records/circulation-audit.json.
 
 ## Renderer release preparation
 
@@ -60,3 +60,6 @@ Run `node prepare-release.mjs` after code/style changes, then `npm run check` to
 `/records/erode-genz-admin.zip` contains the admin portal, backend and build/database setup. `/records/erode-genz-website.zip` contains the public pages, hall maps and assets. Both preserve the same project folder; extract both together for the complete build. See README-ADMIN.md and README-WEBSITE.md.
 
 The server selects the existing compressed ZIP entries from the complete source backup, preserving exact file contents without embedding duplicate large archives. `npm run split-zips` creates the same two ZIPs in /workspace/exports for local delivery. Passwords, live booking records, sessions and generated server output are excluded as documented.
+
+## Original expo branding
+`dist/assets/expo-logo-original.png` is the user-supplied original PNG, used by the header, footer and admin brand without image processing. The source backup stores PNG/JPEG assets as uncompressed ZIP entries; the Worker reuses their exact byte ranges rather than embedding duplicate image copies. Both component downloads still include their required original assets. The build verifies every image range against the original file bytes.

@@ -54,3 +54,7 @@ Apply the committed `drizzle/` migrations through the host's migration workflow.
 The API uses secure HTTP-only session cookies, same-origin write checks, login throttling and revision checks. The frontend and API must share an origin unless an explicit cross-origin integration is implemented. No initial booking tags are invented by the source code.
 
 See `PROJECT-NOTES.md`, `README-ADMIN.md` and the source verification notes for deployment, asset and brochure limitations. Read generated build files as outputs; edit `worker/`, `db/`, `drizzle/` and the authored frontend files instead.
+
+## Current expo branding
+
+The original organiser-supplied expo PNG is preserved unchanged in `dist/assets/expo-logo-original.png`. The public header/footer and admin brand use that same file. Public layouts include larger readable text and Brain Factory credits under both Organised by and Powered by, with a smaller partner mark. The Vercel-specific configuration and shared booking backend are retained.

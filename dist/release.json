@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "release": "f4cdcbaf668f40cd",
+  "release": "a1c783d9ed280196",
   "algorithm": "sha256-normalized-code-v1",
   "entry": "index.html",
   "files": [
@@ -37,12 +37,16 @@
       "sha256": "f3d81cfbebbe604ef85d38963b253f709d6bb5e924a39f5293cd8be938f25efb"
     },
     {
+      "path": "branding.css",
+      "sha256": "62c235755b8829f0306b08a02ededd8983ef5bbabe3af618234722499b5960cc"
+    },
+    {
       "path": "canvas-scene.js",
       "sha256": "cb3d6af8204016381e9dc9945f4cdd2067f898b2a209d14229346d0913cb2bdf"
     },
     {
       "path": "circulation.js",
-      "sha256": "e6e10ea01cb6feda78d1aad913ef6ac75fe0029f978a86a87d76fc22c6c870fa"
+      "sha256": "235421bf5d804819255fb4b5a741f2c0333ab282b4e073c9f19266b82443ff08"
     },
     {
       "path": "data.js",
@@ -62,7 +66,7 @@
     },
     {
       "path": "i18n.js",
-      "sha256": "b65dc0a763fd3a9526795f5dfc947e2c868eb361a30a0045c63a7f8549241051"
+      "sha256": "66660cf0de6895860d703895bc1ae19cf60a59a928e1cbf1bfe443af6e8b83c1"
     },
     {
       "path": "icons.js",
@@ -75,6 +79,10 @@
     {
       "path": "plan-view.js",
       "sha256": "fe86a43d4a0068211b260384ffa96a6c300126408c695c9844cd002302a3c697"
+    },
+    {
+      "path": "readability.css",
+      "sha256": "ca0239ba6abc12b5cc53fd56ab93104923e48dac62d9812c5137c1bc482b4c14"
     },
     {
       "path": "scene.js",

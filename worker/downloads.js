@@ -1,4 +1,4 @@
-const sharedArchiveFiles=new Set(['.gitignore','README.md','dist/data.js','dist/release.json','dist/assets/event-recreated.png','dist/assets/favicon.svg']);
+const sharedArchiveFiles=new Set(['.gitignore','README.md','dist/data.js','dist/release.json','dist/assets/event-recreated.png','dist/assets/expo-logo-original.png','dist/assets/favicon.svg']);
 export function archiveComponent(path){
  if(sharedArchiveFiles.has(path))return 'shared';
  if(path==='README-WEBSITE.md')return 'website';

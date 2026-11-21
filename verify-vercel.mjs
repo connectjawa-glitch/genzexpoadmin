@@ -13,7 +13,7 @@ const build=spawnSync(process.execPath,['build-vercel.mjs'],{cwd:root,encoding:'
 assert.equal(build.status,0,'Standalone Vercel build failed: '+build.stderr);
 async function walk(directory){const files=[];for(const entry of await fs.readdir(directory,{withFileTypes:true})){const file=path.join(directory,entry.name);if(entry.isDirectory())files.push(...await walk(file));else files.push(path.relative(output,file).split(path.sep).join('/'));}return files.sort();}
 const publicFiles=await walk(output);
-assert.deepEqual(publicFiles,['admin-mobile.css','admin.css','admin.js','assets/event-recreated.png','assets/favicon.svg','data.js','index.html','release.json']);
+assert.deepEqual(publicFiles,['admin-mobile.css','admin.css','admin.js','assets/event-recreated.png','assets/expo-logo-original.png','assets/favicon.svg','data.js','index.html','release.json']);
 assert.equal(await exists(path.join(root,'dist/index.html')),false);
 const html=await fs.readFile(path.join(output,'index.html'),'utf8');
 assert.match(html,/id="login-form"[^>]*method="post"[^>]*action="\/api\/admin\/login"/);

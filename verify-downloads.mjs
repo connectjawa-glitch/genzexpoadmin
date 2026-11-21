@@ -10,7 +10,7 @@ const admin=componentZip(source,'admin'),website=componentZip(source,'website');
 const has=(archive,name)=>archive.names.includes(root+name);
 for(const name of ['dist/admin.html','dist/admin.js','dist/admin-mobile.css','worker/api.js','worker/downloads.js','db/schema.js','drizzle/meta/_journal.json','build-worker.mjs','package.json','README-ADMIN.md'])assert.ok(has(admin,name),'Admin dependency: '+name);
 for(const name of ['dist/index.html','dist/app.js','dist/mobile.css','dist/scene.js','dist/whatsapp.js','dist/booking-status.js','dist/assets/vendor/THREE-LICENSE.txt','README-WEBSITE.md'])assert.ok(has(website,name),'Public dependency: '+name);
-for(const name of ['dist/data.js','dist/assets/event-recreated.png','dist/assets/favicon.svg'])assert.ok(has(admin,name)&&has(website,name),'Shared dependency: '+name);
+for(const name of ['dist/data.js','dist/assets/event-recreated.png','dist/assets/expo-logo-original.png','dist/assets/favicon.svg'])assert.ok(has(admin,name)&&has(website,name),'Shared dependency: '+name);
 assert.ok(!has(admin,'dist/index.html'));assert.ok(!has(website,'dist/admin.html'));assert.ok(!has(website,'worker/api.js'));
 for(const archive of [admin,website])assert.ok(archive.names.every(name=>!name.endsWith('.zip')&&!/\/\.env|EXPO_ADMIN_ACCESS|node_modules|\/\.git\//.test(name)),'Excluded credentials/runtime/nested archives');
 assert.equal(archiveComponent('README-ADMIN.md'),'admin');assert.equal(archiveComponent('README-WEBSITE.md'),'website');assert.throws(()=>componentZip(source,'other'));assert.throws(()=>componentZip(new Uint8Array([1,2,3]),'admin'));

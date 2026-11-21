@@ -1,4 +1,4 @@
-import{stalls,halls,colors}from'./data.js?v=f4cdcbaf668f40cd';
+import{stalls,halls,colors}from'./data.js?v=a1c783d9ed280196';
 
 const $=selector=>document.querySelector(selector);
 const statusNames={available:'Available',reserved:'Reserved',sold_out:'Sold out'};
